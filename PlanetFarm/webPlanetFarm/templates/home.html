@@ -13,8 +13,14 @@
     </div>
     <div class="text_view purple-border">
         <label for="text_area"></label>
-        <textarea class="form-control" id="text_area" rows="5"></textarea>
-        <button type="button" class="btn btn-primary" id="submit">Submit</button>
+        <textarea class="form-control" id="text_area" rows="5" disabled></textarea>
+        <form class="input-group mb-3" method="POST" action="{% url 'test' %}">
+            {% csrf_token %}
+            <input type="text" class="form-control">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit">Submit</button>
+            </div>
+        </form>
     </div>
 </div>
 {% endblock %}
