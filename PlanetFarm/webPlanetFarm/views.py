@@ -9,8 +9,7 @@ my_farm = PlanetFarm(5, 8, 10)
 
 
 def home(request):
-    global texts
-    texts = 'Welcome to Planet Farm! Try to enter a sentence below.\n'
+    reset()
     return render(request, 'home.html', {'tiles': my_farm.tiles, 'texts': texts})
 
 
@@ -22,6 +21,11 @@ def test(request):
             texts += text_input + '\n'
             texts += process(text_input)
     return render(request, 'home.html', {'tiles': my_farm.tiles, 'texts': texts})
+
+
+def reset():
+    global texts
+    texts = 'Welcome to Planet Farm! Try to enter a sentence below.\n'
 
 
 def process(text):
