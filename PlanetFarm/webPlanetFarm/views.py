@@ -1,7 +1,8 @@
 from django.shortcuts import render
-
-# Create your views here.
 from .models import PlanetFarm
+from chatterbot import ChatBot
+from chatterbot.trainers import ListTrainer
+from chatterbot.trainers import ChatterBotCorpusTrainer
 
 texts = ''
 my_farm = PlanetFarm(5, 8, 10)
@@ -28,6 +29,15 @@ def reset():
 
 
 def process(text):
-    import nltk
-    
-    return "Sorry, I don't understand\n"
+    chatbot = train()
+    response = chatbot.get_response(text)
+    return str(response) + "\n"
+
+
+def train():
+    chatbot = ChatBot('my_bot')
+    trainer = ChatterBotCorpusTrainer(chatbot)
+    trainer.train(
+        "chatterbot.corpus.english"
+    )
+    return chatbot
