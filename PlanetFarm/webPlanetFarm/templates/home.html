@@ -13,14 +13,20 @@
     </div>
     <div class="text_view purple-border">
         <label for="text_area"></label>
-        <textarea class="form-control" id="text_area" rows="5" disabled></textarea>
+        <textarea class="form-control" id="text_area" rows="5" disabled>{{ texts }}</textarea>
         <form class="input-group mb-3" method="POST" action="{% url 'test' %}">
             {% csrf_token %}
-            <input type="text" class="form-control">
+            <input type="text" class="form-control" name="text_input">
             <div class="input-group-append">
                 <button class="btn btn-outline-secondary" type="submit">Submit</button>
             </div>
         </form>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        const $text = $('#text_area');
+        $text.scrollTop($text[0].scrollHeight);
+    });
+</script>
 {% endblock %}
