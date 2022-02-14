@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.contrib import messages
 
 # Create your views here.
 from .models import PlanetFarm
@@ -18,7 +17,7 @@ def test(request):
     if request.method == 'POST':
         text_input = request.POST['text_input']
         if text_input != '':
-            texts += text_input + '\n'
+            texts += '> ' + text_input + '\n'
             texts += process(text_input)
     return render(request, 'home.html', {'tiles': my_farm.tiles, 'texts': texts})
 
@@ -29,4 +28,6 @@ def reset():
 
 
 def process(text):
-    return 'hello\n'
+    import nltk
+    
+    return "Sorry, I don't understand\n"
