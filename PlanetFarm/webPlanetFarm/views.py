@@ -35,6 +35,7 @@ def test(request):
             texts += process(text_input)
     print(my_farm.toString())
     print(my_farm.animals)
+    my_farm.update()
     return render(request, 'home.html', {'tiles': my_farm.tiles, 'texts': texts})
 
 
@@ -54,11 +55,23 @@ def process(text):
 
 def regex_parser(text):
     text = text.lower()
-    print([val.value for val in (AnimalType)])
+    # print([val.value for val in (AnimalType)])
     animal_strings = [val.value for val in (AnimalType)]
     animal = re.search("|".join(animal_strings), text)
-    if(animal):
+    if animal:
         new_animal = Animal(animal.group())
         my_farm.add_animal(new_animal, True)
         print(new_animal.toString())
-        return "animal exists"
+        return "contains animal"
+
+    grass = re.search("grass", text)
+    if grass:
+        my_farm.add_grass_randomly()
+        print("grass added")
+        return "contains grass"
+
+    fence = re.search("fence|wall", text)
+    if fence:
+        my_farm.add_fence_randomly()
+        print("fence added")
+        return "contains fence"

@@ -10,7 +10,7 @@ class AnimalType(enum.Enum):
     sheep = "sheep"
     rabbit = "rabbit"
     eagle = "eagle"
-    snake = "snake"
+    snake = "Snake"
 
 
 class TileType(enum.Enum):
@@ -40,15 +40,23 @@ class Animal:
         self.x = x
         self.y = y
 
-    def random_position(self, row_upper, col_upper):
-        self.x = random.randint(0, row_upper - 1)
-        self.y = random.randint(0, col_upper - 1)
-
     def simple_name(self):
         return self.type[0]
 
-    def random_move(self):
-        self.x += 1
+    def random_move(self, farm):
+        new_x = self.x
+        new_y = self.y
+        dir = 1
+        if random.randint(0, 1) == 0:
+            dir *= -1
+        if random.randint(0, 1) == 0:
+            new_x += dir * self.move_speed
+        else:
+            new_y += dir * self.move_speed
+
+        if farm.valid_pos(new_x, new_y) and not farm.is_occupied(new_x, new_y):
+            self.x = new_x
+            self.y = new_y
 
     def toString(self):
         return "I am a {} at ({},{})".format(self.type, self.x, self.y)
@@ -68,7 +76,10 @@ class PlanetFarm:
     def get_cols(self):
         return self.cols
 
-    def contains_animal(self, x, y):
+    def valid_pos(self, x, y):
+        return 0 <= x and 0 <= y and x < self.rows and y < self.cols and self.tiles[x][y].type != TileType.WALL
+
+    def is_occupied(self, x, y):
         for ani in self.animals:
             if ani.x == x and ani.y == y:
                 return True
@@ -90,9 +101,28 @@ class PlanetFarm:
 
     def update(self):
         for ani in self.animals:
-            ani.random_move()
+            ani.random_move(self)
+
+    def random_position(self, animal):
+        new_x = random.randint(0, self.rows - 1)
+        new_y = random.randint(0, self.cols - 1)
+
+        while self.is_occupied(new_x, new_y):
+            new_x = random.randint(0, self.rows - 1)
+            new_y = random.randint(0, self.cols - 1)
+
+        animal.x = new_x
+        animal.y = new_y
 
     def add_animal(self, animal, random=False):
         if random:
-            animal.random_position(self.get_rows(), self.get_cols())
+            self.random_position(animal)
         self.animals.append(animal)
+
+    def add_grass_randomly(self):
+        row = random.randint(0, self.rows - 1)
+        col = random.randint(0, self.cols - 1)
+        self.tiles[row][col].type = TileType.GRASS
+
+    def add_fence_randomly(self):
+        return 0
