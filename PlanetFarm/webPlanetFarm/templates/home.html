@@ -1,35 +1,43 @@
-{% extends 'base.html' %}
-{% block content %}
-<div class="main_div">
-    <div class="farm_view">
-        <div class="row">
-            {% for row in tiles %}
-            {% for tile in row %}
-            <div class="col tile">
-                {% load static %}
-                <img class="image" src="{{tile}}" />
+{% extends 'base.html' %} {% block content %}
+
+<div class="container">
+    <div class="header">
+        <h1>Planet Farm</h1>
+    </div>
+
+    <div class="main_div">
+        <div class="farm_view">
+            <div class="row">
+                {% for row in tiles %} {% for tile in row %}
+                <div class="col tile">
+                    {% load static %}
+                    <img class="image" src="{{tile}}" />
+                </div>
+                {% endfor %}
+                <div class="w-100"></div>
+                {% endfor %}
             </div>
-            {% endfor %}
-            <div class="w-100"></div>
-            {% endfor %}
+        </div>
+        <div class="text_view purple-border">
+            <label for="text_area"></label>
+            <textarea class="form-control" id="text_area" rows="5" disabled>{{ texts }}</textarea>
+            <form class="input-group mb-3" method="POST" action="{% url 'test' %}">
+                {% csrf_token %}
+                <input type="text" class="form-control" name="text_input" autofocus>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary round teal" type="submit">Submit</button>
+                </div>
+            </form>
         </div>
     </div>
-    <div class="text_view purple-border">
-        <label for="text_area"></label>
-        <textarea class="form-control" id="text_area" rows="5" disabled>{{ texts }}</textarea>
-        <form class="input-group mb-3" method="POST" action="{% url 'test' %}">
-            {% csrf_token %}
-            <input type="text" class="form-control" name="text_input" autofocus>
-            <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="submit">Submit</button>
-            </div>
-        </form>
-    </div>
+
 </div>
+
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         const $text = $('#text_area');
         $text.scrollTop($text[0].scrollHeight);
     });
 </script>
+
 {% endblock %}
