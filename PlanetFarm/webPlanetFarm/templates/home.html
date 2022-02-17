@@ -5,7 +5,10 @@
         <div class="row">
             {% for row in tiles %}
             {% for tile in row %}
-            <div class="col tile"></div>
+            <div class="col tile">
+                {% load static %}
+                <img class="image" src="{{tile}}" />
+            </div>
             {% endfor %}
             <div class="w-100"></div>
             {% endfor %}
