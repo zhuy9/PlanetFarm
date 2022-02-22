@@ -61,6 +61,7 @@ class Animal:
         else:
             new_y += dir * self.move_speed
 
+        # if farm.valid_pos(new_x, new_y) and farm.is_occupied(new_x, new_y, animal=self):
         if farm.valid_pos(new_x, new_y):
             dict[(self.x, self.y)].remove(self)
             self.x = new_x
@@ -107,7 +108,8 @@ class PlanetFarm:
         if 'grass' in objs:
             for animal in objs:
                 if not isinstance(animal, str):
-                    return not (str(animal.type) == 'sheep' or str(animal.type) == 'rabbit')
+                    if not (str(animal.type) == 'sheep' or str(animal.type) == 'rabbit'):
+                        return True
         dict = {
             'sheep': None,
             'eagle': None,
@@ -207,6 +209,17 @@ class PlanetFarm:
             animal.y = coordinate[1] - 1
         self.animals.append(animal)
         add_to_dict(self.dict, animal.x, animal.y, animal)
+
+    def remove_animal(self, animal_to_remove):
+        for animal in self.animals:
+            if str(animal.type) == animal_to_remove:
+                self.animals.remove(animal)
+                self.dict[(animal.x, animal.y)].remove(animal)
+
+    def remove_grass(self):
+        grass = self.grasses.pop(0)
+        self.tiles[grass[0]][grass[1]].type = TileType.PLAIN
+        self.dict[(grass[0], grass[1])].remove('grass')
 
     def add_grass_randomly(self):
         row = random.randint(0, self.rows - 1)

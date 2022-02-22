@@ -123,16 +123,20 @@ def regex_parser(text):
         while animals:
             animal = animals.pop(0)
             if animal in herbivores:
+                if intersection(food_chain2[animal], animals_in_the_sent):
+                    continue
                 if not grasses:
                     result += "The " + animal + " does not find any grass"
-                elif not intersection(food_chain2[animal], animals_in_the_sent):
+                else:
                     result += "The " + animal + " is eating grass"
+                    my_farm.remove_grass()
                 continue
             food = intersection(food_chain[animal], current_animals)
             if not food:
                 result += "The " + animal + " does not find its prey"
             else:
                 result += "The " + animal + " is eating " + food[0]
+                my_farm.remove_animal(food[0])
         return result
 
     if animals and is_adding:
@@ -167,6 +171,7 @@ def regex_parser(text):
             my_farm.add_fence(coordinate)
             result += "A fence has been added to your farm at " + str(coordinate) + " "
         return result
+    return ''
 
 
 def intersection(lst1, lst2):
